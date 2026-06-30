@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Love | I’m Sorry</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Parisienne&family=Great+Vibes&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #08060a;
+            --accent: #ff5d7a;
+            --accent-soft: #ffd5de;
+            --card: #171017;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: white;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .font-serif {
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .font-script {
+            font-family: 'Parisienne', cursive;
+        }
+
+        .font-vibes {
+            font-family: 'Great Vibes', cursive;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes float-hand-left {
+            0%, 100% { transform: translateY(0) rotate(0); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+
+        @keyframes float-hand-right {
+            0%, 100% { transform: translateY(0) rotate(0); }
+            50% { transform: translateY(20px) rotate(-2deg); }
+        }
+
+        .animate-float-left {
+            animation: float-hand-left 12s ease-in-out infinite;
+        }
+
+        .animate-float-right {
+            animation: float-hand-right 14s ease-in-out infinite;
+        }
+
+        .noise-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            pointer-events: none;
+            opacity: 0.05;
+            mix-blend-mode: overlay;
+            background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+        }
+
+        .parallax-card-up {
+            transform: translateY(var(--scroll-offset-up, 0px));
+        }
+
+        .parallax-card-down {
+            transform: translateY(var(--scroll-offset-down, 0px));
+        }
+
+        .heart-bubble {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 9999px;
+            background: rgba(255, 93, 122, 0.16);
+            color: #ffd5de;
+            font-size: 1rem;
+            box-shadow: 0 0 18px rgba(255, 93, 122, 0.2);
+        }
+
+        .letter-card {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            color: #ffeaf0;
+        }
+
+        .music-button {
+            border: none;
+            outline: none;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 9999px;
+            background: linear-gradient(135deg, #ff5d7a, #ff8da3);
+            color: white;
+            font-size: 1rem;
+            box-shadow: 0 8px 24px rgba(255, 93, 122, 0.28);
+            transition: transform 0.3s ease;
+        }
+
+        .music-button:hover {
+            transform: scale(1.05);
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(14px);
+            color: #ffd5de;
+            padding: 0.7rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.74rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-bottom: 1.4rem;
+        }
+
+        .hero-badge .dot {
+            width: 0.55rem;
+            height: 0.55rem;
+            border-radius: 9999px;
+            background: linear-gradient(135deg, #ff5d7a, #ffd5de);
+            box-shadow: 0 0 10px rgba(255, 93, 122, 0.6);
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.95rem 1.35rem;
+            border-radius: 9999px;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: linear-gradient(135deg, rgba(255, 93, 122, 0.24), rgba(255, 255, 255, 0.08));
+            backdrop-filter: blur(12px);
+            box-shadow: 0 12px 40px rgba(255, 93, 122, 0.16);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .hero-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 48px rgba(255, 93, 122, 0.24);
+        }
+
+        .hero-cta .arrow {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.8rem;
+            height: 1.8rem;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.13);
+            font-size: 0.95rem;
+        }
+
+        .soft-divider {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 213, 222, 0.45), transparent);
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen bg-[#08060a] selection:bg-[#ff5d7a] selection:text-white">
+        <div class="noise-overlay"></div>
+
+        <nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 py-8">
+            <div class="container mx-auto px-6 flex items-center justify-between">
+                <a href="#" id="nav-logo-link" class="text-2xl font-bold tracking-tighter font-serif text-[#ffd5de]">
+                    For Monia.
+                </a>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#expertise" id="nav-expertise-link" class="text-sm text-gray-400 hover:text-white transition-colors duration-300">My Words</a>
+                    <a href="#works" id="nav-works-link" class="text-sm text-gray-400 hover:text-white transition-colors duration-300">My Promise</a>
+                    <a href="#contact" id="nav-perspectives-link" class="text-sm text-gray-400 hover:text-white transition-colors duration-300">My Heart</a>
+                </div>
+
+                <a href="#contact" id="nav-cta-link" class="inline-flex items-center justify-center px-6 py-3 rounded-full text-sm font-medium bg-[#ffd5de] text-[#08060a] hover:scale-105 hover:bg-white transition-all duration-300">
+                    I Love You
+                </a>
+            </div>
+        </nav>
+
+        <section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-32 pb-20 bg-[#08060a]">
+            <div class="absolute inset-0 z-0 pointer-events-none select-none">
+                <div class="absolute top-0 left-0 w-full h-full opacity-60 mix-blend-screen">
+                    <img src="https://framerusercontent.com/images/9zvwRJAavKKacVyhFCwHyXW1U.png?width=1536&height=1024" alt="Atmosphere" class="w-full h-full object-cover object-center opacity-80">
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#08060a] z-10"></div>
+            </div>
+
+            <div class="absolute -left-[10%] top-[-10%] md:left-[-5%] md:top-[-15%] w-[50vw] md:w-[40vw] max-w-[800px] z-10 pointer-events-none mix-blend-hard-light opacity-80 animate-float-left">
+                 <img src="https://framerusercontent.com/images/KNhiA5A2ykNYqNkj04Hk6BVg5A.png?width=1540&height=1320" alt="Hand Reaching" class="w-full h-auto object-contain">
+            </div>
+
+            <div class="absolute -right-[10%] bottom-[-10%] md:right-[-5%] md:bottom-[-5%] w-[45vw] md:w-[35vw] max-w-[700px] z-10 pointer-events-none mix-blend-hard-light opacity-80 animate-float-right">
+                 <img src="https://framerusercontent.com/images/X89VFCABCEjjZ4oLGa3PjbOmsA.png?width=1542&height=1002" alt="Hand Receiving" class="w-full h-auto object-contain">
+            </div>
+
+            <div class="container mx-auto px-6 relative z-20 text-center flex flex-col items-center justify-center h-full">
+                <div id="hero-content-wrapper" class="max-w-4xl mx-auto">
+                    <div class="reveal">
+                        <div class="hero-badge mx-auto">
+                            <span class="dot"></span>
+                            <span>A soft letter for your heart</span>
+                        </div>
+                        <h1 class="text-5xl md:text-7xl font-medium leading-[1.1] tracking-tight mb-6 text-[#ffeaf0] mix-blend-overlay font-serif" 
+                            style="text-shadow: 0 0 12px rgba(255,255,255,0.6);">
+                            Monia, <br />
+                            <span class="italic font-light text-[#ffd5de] tracking-[0.08em]" style="font-family: 'Cormorant Garamond', serif;">मुझे माफ़ कर दो</span>
+                        </h1>
+                    </div>
+                    
+                    <div class="reveal" style="transition-delay: 200ms;">
+                        <p class="text-base md:text-lg text-[#ffeaf0]/90 max-w-lg mx-auto mb-10 font-light tracking-wide leading-relaxed mix-blend-overlay"
+                           style="text-shadow: 0 0 12px rgba(255,255,255,0.6);">
+                            For every hurt I caused, every tear I brought, and every moment I made you feel alone — I am deeply sorry, Monia.
+                        </p>
+                    </div>
+
+                    <div class="reveal flex flex-col items-center gap-6" style="transition-delay: 400ms;">
+                        <a href="#contact" class="hero-cta">
+                            <span>Open My Heart</span>
+                            <span class="arrow">↗</span>
+                        </a>
+                        
+                        <div class="flex items-center gap-4 text-[10px] md:text-xs text-white/40 uppercase tracking-widest mt-8 font-mono">
+                           <span id="current-time">11:11 PM</span>
+                           <span class="w-px h-3 bg-white/20"></span>
+                           <span>With all my love</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="expertise" class="py-32 relative">
+            <div class="container mx-auto px-6">
+                <div class="max-w-4xl mx-auto text-center reveal">
+                    <h2 class="text-3xl md:text-5xl lg:text-6xl leading-tight text-white/90 mb-12 font-serif">
+                        Monia, I never want my love to feel like distance again.
+                    </h2>
+                    <p class="text-xl md:text-2xl text-gray-400 leading-relaxed font-light">
+                        I know I hurt you a lot, and we have fought a lot lately. These days have been worse for me than any other days, and I feel like I am going to lose you this time. I am here at your feet, saying sorry for whatever I did and however I treated you. This fear of losing you has changed something inside me, and I love you more and more. It hurts me deeply that I was not able to treat my girl better. Please come back this time, I will do everything right.
+                    </p>
+                </div>
+
+                <div class="mt-32 grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center opacity-40 grayscale hover:grayscale-0 transition-all duration-500">
+                    <div class="reveal font-bold text-xl tracking-widest text-[#ffd5de]">LOVE</div>
+                    <div class="reveal font-bold text-xl tracking-widest text-[#ffd5de]" style="transition-delay: 100ms;">TRUTH</div>
+                    <div class="reveal font-bold text-xl tracking-widest text-[#ffd5de]" style="transition-delay: 200ms;">CARE</div>
+                    <div class="reveal font-bold text-xl tracking-widest text-[#ffd5de]" style="transition-delay: 300ms;">FOREVER</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="works" class="py-40 relative overflow-hidden">
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="reveal mb-32">
+                    <h2 class="text-5xl md:text-7xl text-center font-serif">
+                        My heart still says <br />
+                        <span class="italic">you are my home, Monia</span>
+                    </h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                    <div class="parallax-card-down">
+                        <div class="reveal bg-[#ff5d7a] rounded-3xl p-8 md:p-12 aspect-[4/5] flex flex-col justify-between shadow-2xl hover:shadow-[0_20px_50px_rgba(255,93,122,0.3)] transition-all duration-500 group cursor-pointer">
+                            <div class="flex justify-between items-start">
+                                <div class="w-12 h-12 rounded-full bg-black/10 flex items-center justify-center group-hover:rotate-45 transition-transform duration-500">
+                                    <iconify-icon icon="lucide:heart" class="text-black text-2xl"></iconify-icon>
+                                </div>
+                                <span class="text-black font-medium text-sm border border-black/20 px-3 py-1 rounded-full">01</span>
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-4xl md:text-5xl text-black mb-4 leading-none tracking-tight font-serif">
+                                    For the hurt <br />I caused you
+                                </h3>
+                                <p class="text-black/75 text-lg leading-snug">
+                                    I know I was not always gentle with your heart, Monia, and I hate that I made you feel pain.
+                                </p>
+                            </div>
+                            
+                            <div class="w-full h-px bg-black/10 mt-8"></div>
+                        </div>
+                    </div>
+
+                    <div class="parallax-card-up md:mt-24">
+                        <div class="reveal bg-[#171017] border border-white/10 rounded-3xl p-8 md:p-12 aspect-[4/5] flex flex-col justify-between shadow-2xl group cursor-pointer hover:border-[#ff5d7a]/50 transition-all duration-500" style="transition-delay: 150ms;">
+                            <div class="flex justify-between items-start">
+                                <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                                   <iconify-icon icon="lucide:arrow-right" class="text-white text-2xl -rotate-45"></iconify-icon>
+                                </div>
+                                <span class="text-white/50 font-medium text-sm border border-white/10 px-3 py-1 rounded-full">02</span>
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-4xl md:text-5xl text-white mb-4 leading-none tracking-tight font-serif">
+                                    The love <br />I choose for you
+                                </h3>
+                                <p class="text-gray-400 text-lg leading-snug">
+                                    Even now, my heart still chooses you with honesty, tenderness, and a promise to do better every day.
+                                </p>
+                            </div>
+                            
+                            <div class="w-full h-px bg-white/10 mt-8"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] opacity-10 pointer-events-none"
+                 style="background-image: radial-gradient(circle, #ff5d7a 1px, transparent 1px); background-size: 40px 40px;">
+            </div>
+        </section>
+
+        <section id="contact" class="py-24 relative">
+            <div class="container mx-auto px-6">
+                <div class="reveal mx-auto max-w-5xl rounded-[2.5rem] border border-white/10 bg-[linear-gradient(135deg,rgba(255,255,255,0.12),rgba(255,93,122,0.10))] p-4 md:p-6 shadow-[0_25px_80px_rgba(255,93,122,0.16)]">
+                    <div class="overflow-hidden rounded-[1.8rem] border border-white/10 bg-black/20 p-2 md:p-3">
+                        <img src="letter.jpg" alt="Letter from me" class="w-full h-auto rounded-[1.4rem] object-contain shadow-[0_10px_35px_rgba(0,0,0,0.25)]" />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="py-20 border-t border-white/5 bg-[#08060a] relative overflow-hidden">
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-12">
+                    <div class="w-full md:w-auto">
+                        <h2 class="text-[10vw] leading-[0.8] tracking-tighter text-white/10 font-bold select-none pointer-events-none">
+                            I LOVE YOU MY MAKDU
+                        </h2>
+                    </div>
+                    
+                    <div class="flex flex-col gap-8 text-right">
+                        <div class="flex flex-col gap-4 text-gray-400">
+                            <a href="#" id="footer-ig-link" class="hover:text-white transition-colors">Forever</a>
+                            <a href="#" id="footer-tw-link" class="hover:text-white transition-colors">Always</a>
+                            <a href="#" id="footer-li-link" class="hover:text-white transition-colors">Yours</a>
+                        </div>
+                        <p class="text-sm text-gray-600">© 2026 For Monia. All my heart is yours.</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+        const nav = document.getElementById('main-nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                nav.classList.add('py-4', 'bg-[#08060a]/80', 'backdrop-blur-md', 'border-b', 'border-white/5');
+                nav.classList.remove('py-8', 'bg-transparent');
+            } else {
+                nav.classList.remove('py-4', 'bg-[#08060a]/80', 'backdrop-blur-md', 'border-b', 'border-white/5');
+                nav.classList.add('py-8', 'bg-transparent');
+            }
+        });
+
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            document.querySelectorAll('.parallax-card-up').forEach(el => {
+                el.style.setProperty('--scroll-offset-up', `${scrolled * -0.05}px`);
+            });
+            document.querySelectorAll('.parallax-card-down').forEach(el => {
+                el.style.setProperty('--scroll-offset-down', `${scrolled * 0.05}px`);
+            });
+        });
+
+        function updateTime() {
+            const clockEl = document.getElementById('current-time');
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            clockEl.textContent = `${hours}:${minutes} ${ampm}`;
+        }
+        setInterval(updateTime, 60000);
+        updateTime();
+
+        const heroWrapper = document.getElementById('hero-content-wrapper');
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            if (scrolled < 1000) {
+                heroWrapper.style.transform = `translateY(${scrolled * 0.4}px)`;
+                heroWrapper.style.opacity = Math.max(0, 1 - scrolled / 600);
+            }
+        });
+
+        const musicToggle = document.getElementById('music-toggle');
+        const loveSong = document.getElementById('love-song');
+
+        function startSong() {
+            loveSong.play().then(() => {
+                musicToggle.textContent = '❚❚';
+            }).catch(() => {
+                musicToggle.textContent = '▶';
+            });
+        }
+
+        loveSong.addEventListener('canplaythrough', () => {
+            startSong();
+        });
+
+        document.addEventListener('click', startSong, { once: true });
+        document.addEventListener('touchstart', startSong, { once: true });
+
+        musicToggle.addEventListener('click', (event) => {
+            event.stopPropagation();
+            if (loveSong.paused) {
+                startSong();
+            } else {
+                loveSong.pause();
+                musicToggle.textContent = '▶';
+            }
+        });
+
+        loveSong.addEventListener('ended', () => {
+            musicToggle.textContent = '▶';
+        });
+    </script>
+</body>
+</html>
