@@ -354,6 +354,7 @@
                     <div class="overflow-hidden rounded-[1.8rem] border border-white/10 bg-black/20 p-2 md:p-3">
                         <img src="letter.jpg" alt="Letter from me" class="w-full h-auto rounded-[1.4rem] object-contain shadow-[0_10px_35px_rgba(0,0,0,0.25)]" />
                     </div>
+                    <audio id="love-song" src="song.mp3" preload="auto" loop style="display:none;"></audio>
                 </div>
             </div>
         </section>
@@ -437,37 +438,21 @@
             }
         });
 
-        const musicToggle = document.getElementById('music-toggle');
         const loveSong = document.getElementById('love-song');
 
         function startSong() {
-            loveSong.play().then(() => {
-                musicToggle.textContent = '❚❚';
-            }).catch(() => {
-                musicToggle.textContent = '▶';
-            });
+            if (!loveSong) return;
+            if (loveSong.paused) {
+                loveSong.play().catch(() => {});
+            }
         }
 
-        loveSong.addEventListener('canplaythrough', () => {
-            startSong();
-        });
-
-        document.addEventListener('click', startSong, { once: true });
-        document.addEventListener('touchstart', startSong, { once: true });
-
-        musicToggle.addEventListener('click', (event) => {
-            event.stopPropagation();
-            if (loveSong.paused) {
-                startSong();
-            } else {
-                loveSong.pause();
-                musicToggle.textContent = '▶';
-            }
-        });
-
-        loveSong.addEventListener('ended', () => {
-            musicToggle.textContent = '▶';
-        });
+        if (loveSong) {
+            loveSong.addEventListener('canplaythrough', startSong);
+            document.addEventListener('click', startSong, { once: true });
+            document.addEventListener('touchstart', startSong, { once: true });
+            document.addEventListener('keydown', startSong, { once: true });
+        }
     </script>
 </body>
 </html>
